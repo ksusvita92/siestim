@@ -1,0 +1,17 @@
+Package: siestim
+Type: Package
+Title: Serial Interval Estimation
+Version: 0.1.0
+Author: c(person(given = "Kurnia",
+                 family = "Susvitasari",
+                 role = c("aut", "cre")),
+                 email = "ksusvita@gmail.com")
+Description: Estimate the serial interval distribution.
+Depends: R (>= 3.6.0)
+Imports: 
+Remotes: andersgs/transtreesampler
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/ksusvita92/siestim
+BugReports: https://github.com/ksusvita92/siestim/issues
