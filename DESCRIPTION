@@ -8,10 +8,11 @@ Author: c(person(given = "Kurnia",
                  email = "ksusvita@gmail.com")
 Description: Estimate the serial interval distribution.
 Depends: R (>= 3.6.0)
-Imports: 
-Remotes: andersgs/transtreesampler
+Imports: dfoptim, numDeriv, foreach, doSNOW, parallel, tcltk, ggplot2, patchwork, visNetwork, dplyr
+Remotes: 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/ksusvita92/siestim
 BugReports: https://github.com/ksusvita92/siestim/issues
+RoxygenNote: 7.1.2
