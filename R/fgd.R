@@ -29,14 +29,16 @@
 #' @param lower.tail logical; if \code{TRUE}, the probabilities are returned as \eqn{Pr(X \le x)},
 #' otherwise \eqn{Pr(X > x)}.
 #'
-#' @return \code{rfgd} generates random variables, \code{dfgd} returns the density, and
-#' \code{pfgd} returns the cumulative density of CGG distribution. \cr\cr
-#' The length of the result is determined by \code{n} for \code{rfgd}, and the length of
-#' \code{x} for \code{dfgd} and \code{pfgd}.
+#' @return \code{rfgd} generates random variables, \code{dfgd} returns the density,
+#' \code{pfgd} returns the cumulative density,  and \code{qfgd} returns the quantile
+#' given probability \code{p} of FGD distribution. \cr\cr
+#' The length of the result is determined by \code{n} for \code{rfgd}, the length of
+#' \code{x} for \code{dfgd} and \code{pfgd}, and the length of \code{p} for \code{qfgd}.
 #'
 #' @examples x <- rfgd(10, 4.5, 2)
 #' fx <- dfgd(x, 4.5, 2)
 #' Fx <- pfgd(x, 4.5, 2)
+#' q <- qfgd(Fx, 4.5, 2)
 #'
 #' @references
 #' \enumerate{
