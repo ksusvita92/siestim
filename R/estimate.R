@@ -109,17 +109,18 @@ estimate <- function(x, init, lower, upper, ci = .95, ncore = 1, prior.pi = NULL
   }
 
 
-  # show progress bar
-  pb <- tkProgressBar("SI estimation", "Progress...", 0, length(x), 0)
-  progress <- function(n){
-    info <- sprintf("%1.0f%% done", n/length(x)*100)
-    setTkProgressBar(pb, n, "SI estimation", info)
-  }
-  opts <- list(progress=progress)
 
 
   # do parallel?
   if(.showProgress){
+    # show progress bar
+    pb <- tkProgressBar("SI estimation", "Progress...", 0, length(x), 0)
+    progress <- function(n){
+      info <- sprintf("%1.0f%% done", n/length(x)*100)
+      setTkProgressBar(pb, n, "SI estimation", info)
+    }
+    opts <- list(progress=progress)
+
     if(ncore == 1){
       res <- foreach(i = 1:length(x),
                      .combine = rbind,
