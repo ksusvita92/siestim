@@ -69,7 +69,7 @@
 #' est <- estimate(x = data$transnet$onset_diff, init = c(2,2,.5,.5), lower = c(10,10,1,1), ncore = ncore)
 #' plot(est)
 #' est
-estimate <- function(x, init, lower, upper, ci = .95, ncore = 1, prior.pi = NULL, prior.w = NULL, control = list()){
+estimate <- function(x, init, lower, upper, ci = .95, ncore = 1, prior.pi = NULL, prior.w = NULL, .showProgress = TRUE, control = list()){
   # start the clock
   start <- Sys.time()
 
@@ -114,7 +114,7 @@ estimate <- function(x, init, lower, upper, ci = .95, ncore = 1, prior.pi = NULL
     info <- sprintf("%1.0f%% done", n/length(x)*100)
     setTkProgressBar(pb, n, "SI estimation", info)
   }
-  opts <- list(progress=progress)
+  opts <- ifelse(.showProgress, list(progress=progress), list())
 
 
   # do parallel?
