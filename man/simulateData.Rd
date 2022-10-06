@@ -49,3 +49,7 @@ a transmission in which both primary and secondary cases were infected by an uns
 (unsampled) case. \code{w} represents the fraction of non-coprimary transmission
 in the transmsission network. \cr\cr
 }
+\examples{
+data <- simulateData(100, 4, 2, R0 = 1)
+plot(data)
+}
