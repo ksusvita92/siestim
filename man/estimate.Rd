@@ -13,6 +13,7 @@ estimate(
   ncore = 1,
   prior.pi = NULL,
   prior.w = NULL,
+  .showProgress = TRUE,
   control = list()
 )
 }
@@ -33,6 +34,8 @@ it is \eqn{\mu, \sigma, \pi, w}.}
 the evaluation is done by parallel.}
 
 \item{prior.pi, prior.w}{vector of Beta distributed parameters for \eqn{\pi, w}. See "Details".}
+
+\item{.showProgress}{logical; should a progress bar be shown?}
 
 \item{control}{a list of control parameters. See "Details".}
 }
@@ -78,4 +81,6 @@ standard deviation \eqn{\sigma}.
 data <- simulateData(100, 4, 2, R0 = 1)
 ncore <- parallel::detectCores()
 est <- estimate(x = data$transnet$onset_diff, init = c(2,2,.5,.5), lower = c(10,10,1,1), ncore = ncore)
+plot(est)
+est
 }
