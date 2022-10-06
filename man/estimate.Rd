@@ -80,7 +80,7 @@ standard deviation \eqn{\sigma}.
 \examples{
 data <- simulateData(100, 4, 2, R0 = 1)
 ncore <- parallel::detectCores()
-est <- estimate(x = data$transnet$onset_diff, init = c(2,2,.5,.5), lower = c(10,10,1,1), ncore = ncore)
+est <- estimate(x = data$transnet$onset_diff, init = c(2,2,.5,.5), lower = rep(0,4), upper = c(10,10,1,1), ncore = ncore)
 plot(est)
 est
 }

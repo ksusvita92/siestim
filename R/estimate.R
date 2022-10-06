@@ -67,7 +67,7 @@
 #' @examples
 #' data <- simulateData(100, 4, 2, R0 = 1)
 #' ncore <- parallel::detectCores()
-#' est <- estimate(x = data$transnet$onset_diff, init = c(2,2,.5,.5), lower = c(10,10,1,1), ncore = ncore)
+#' est <- estimate(x = data$transnet$onset_diff, init = c(2,2,.5,.5), lower = rep(0,4), upper = c(10,10,1,1), ncore = ncore)
 #' plot(est)
 #' est
 estimate <- function(x, init, lower, upper, ci = .95, ncore = 1, prior.pi = NULL, prior.w = NULL, .showProgress = TRUE, control = list()){
@@ -115,51 +115,95 @@ estimate <- function(x, init, lower, upper, ci = .95, ncore = 1, prior.pi = NULL
     info <- sprintf("%1.0f%% done", n/length(x)*100)
     setTkProgressBar(pb, n, "SI estimation", info)
   }
-  opts <- ifelse(.showProgress, list(progress=progress), list())
+  opts <- list(progress=progress)
 
 
   # do parallel?
-  if(ncore == 1){
-    res <- foreach(i = 1:length(x),
-                   .combine = rbind,
-                   .export = c("dcgg", "dfgd", "logll", "opt"),
-                   .options.snow=opts, .errorhandling="pass") %do% {
-                     tryCatch(tmpfn(init, x[[i]], lower, upper, prior.pi = NULL, prior.w = NULL, control),
-                              error = function(e){
-                                msg <- conditionMessage(e)
-                                output <- data.frame(mu = NA, sigma = NA, pi = NA, w = NA,
-                                                     se.mu = NA, se.sigma = NA, se.pi = NA, se.w = NA,
-                                                     ll = NA, convergence = NA, msg = msg, stringsAsFactors = FALSE)
-                                return(output)
-                              })
-                   }
+  if(.showProgress){
+    if(ncore == 1){
+      res <- foreach(i = 1:length(x),
+                     .combine = rbind,
+                     .export = c("dcgg", "dfgd", "logll", "opt"),
+                     .options.snow=opts, .errorhandling="pass") %do% {
+                       tryCatch(tmpfn(init, x[[i]], lower, upper, prior.pi = NULL, prior.w = NULL, control),
+                                error = function(e){
+                                  msg <- conditionMessage(e)
+                                  output <- data.frame(mu = NA, sigma = NA, pi = NA, w = NA,
+                                                       se.mu = NA, se.sigma = NA, se.pi = NA, se.w = NA,
+                                                       ll = NA, convergence = NA, msg = msg, stringsAsFactors = FALSE)
+                                  return(output)
+                                })
+                     }
+    } else{
+      if(ncore > parallel::detectCores()) ncore <- parallel::detectCores()
+      # setup parallel
+      cl <- makeCluster(ncore, type = "SOCK")
+      registerDoSNOW(cl)
+
+      res <- foreach(i = 1:length(x),
+                     .combine = rbind,
+                     .export = c("dcgg", "dfgd", "logll", "opt"),
+                     .options.snow=opts, .errorhandling="pass") %dopar% {
+                       .GlobalEnv$dcgg <- dcgg
+                       .GlobalEnv$dfgd <- dfgd
+                       .GlobalEnv$logll <- logll
+                       .GlobalEnv$opt <- opt
+                       tryCatch(tmpfn(init, x[[i]], lower, upper, prior.pi = NULL, prior.w = NULL, control),
+                                error = function(e){
+                                  msg <- conditionMessage(e)
+                                  output <- data.frame(mu = NA, sigma = NA, pi = NA, w = NA,
+                                                       se.mu = NA, se.sigma = NA, se.pi = NA, se.w = NA,
+                                                       ll = NA, convergence = NA, msg = msg, stringsAsFactors = FALSE)
+                                  return(output)
+                                })
+                     }
+
+      stopCluster(cl)
+    }
+    close(pb)
   } else{
-    if(ncore > parallel::detectCores()) ncore <- parallel::detectCores()
-    # setup parallel
-    cl <- makeCluster(ncore, type = "SOCK")
-    registerDoSNOW(cl)
+    if(ncore == 1){
+      res <- foreach(i = 1:length(x),
+                     .combine = rbind,
+                     .export = c("dcgg", "dfgd", "logll", "opt"),
+                     .errorhandling="pass") %do% {
+                       tryCatch(tmpfn(init, x[[i]], lower, upper, prior.pi = NULL, prior.w = NULL, control),
+                                error = function(e){
+                                  msg <- conditionMessage(e)
+                                  output <- data.frame(mu = NA, sigma = NA, pi = NA, w = NA,
+                                                       se.mu = NA, se.sigma = NA, se.pi = NA, se.w = NA,
+                                                       ll = NA, convergence = NA, msg = msg, stringsAsFactors = FALSE)
+                                  return(output)
+                                })
+                     }
+    } else{
+      if(ncore > parallel::detectCores()) ncore <- parallel::detectCores()
+      # setup parallel
+      cl <- makeCluster(ncore, type = "SOCK")
+      registerDoSNOW(cl)
 
-    res <- foreach(i = 1:length(x),
-                   .combine = rbind,
-                   .export = c("dcgg", "dfgd", "logll", "opt"),
-                   .options.snow=opts, .errorhandling="pass") %dopar% {
-                     .GlobalEnv$dcgg <- dcgg
-                     .GlobalEnv$dfgd <- dfgd
-                     .GlobalEnv$logll <- logll
-                     .GlobalEnv$opt <- opt
-                     tryCatch(tmpfn(init, x[[i]], lower, upper, prior.pi = NULL, prior.w = NULL, control),
-                              error = function(e){
-                                msg <- conditionMessage(e)
-                                output <- data.frame(mu = NA, sigma = NA, pi = NA, w = NA,
-                                                     se.mu = NA, se.sigma = NA, se.pi = NA, se.w = NA,
-                                                     ll = NA, convergence = NA, msg = msg, stringsAsFactors = FALSE)
-                                return(output)
-                              })
-                   }
+      res <- foreach(i = 1:length(x),
+                     .combine = rbind,
+                     .export = c("dcgg", "dfgd", "logll", "opt"),
+                     .errorhandling="pass") %dopar% {
+                       .GlobalEnv$dcgg <- dcgg
+                       .GlobalEnv$dfgd <- dfgd
+                       .GlobalEnv$logll <- logll
+                       .GlobalEnv$opt <- opt
+                       tryCatch(tmpfn(init, x[[i]], lower, upper, prior.pi = NULL, prior.w = NULL, control),
+                                error = function(e){
+                                  msg <- conditionMessage(e)
+                                  output <- data.frame(mu = NA, sigma = NA, pi = NA, w = NA,
+                                                       se.mu = NA, se.sigma = NA, se.pi = NA, se.w = NA,
+                                                       ll = NA, convergence = NA, msg = msg, stringsAsFactors = FALSE)
+                                  return(output)
+                                })
+                     }
 
-    stopCluster(cl)
+      stopCluster(cl)
+    }
   }
-  close(pb)
+
 
 
   # get output
