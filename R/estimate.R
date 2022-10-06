@@ -44,6 +44,7 @@
 #' @param ncore number of physical CPUs/cores to be used during the computation. If \code{ncore > 1},
 #' the evaluation is done by parallel.
 #' @param prior.pi,prior.w vector of Beta distributed parameters for \eqn{\pi, w}. See "Details".
+#' @param .showProgress logical; should a progress bar be shown?
 #' @param control a list of control parameters. See "Details".
 #'
 #' @import foreach
