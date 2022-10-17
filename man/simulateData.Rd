@@ -4,7 +4,7 @@
 \alias{simulateData}
 \title{Simulate Transmission Data}
 \usage{
-simulateData(n, mu, sigma, pi = 0.5, w = 0.7, R0 = 3)
+simulateData(n, mu, sigma, pi = 0.5, w = 0.7, kappa = 3)
 }
 \arguments{
 \item{n}{number of data to be generated.}
@@ -17,8 +17,8 @@ simulateData(n, mu, sigma, pi = 0.5, w = 0.7, R0 = 3)
 
 \item{w}{probability of non-coprimary transmissions. See "Details".}
 
-\item{R0}{expected number of secondary cases. Each case can produce a number of
-secondary cases which is modeled by Poisson distribution with mean \code{R0*pi}.}
+\item{kappa}{expected number of contacts per case. If \code{pi > 0}, the expected number
+of contacts is modelled by Poisson distribution with mean \code{kappa*pi}.}
 }
 \value{
 A list of data frames which include the epidata and the transmission network.
@@ -50,6 +50,6 @@ a transmission in which both primary and secondary cases were infected by an uns
 in the transmsission network. \cr\cr
 }
 \examples{
-data <- simulateData(100, 4, 2, R0 = 1)
+data <- simulateData(100, 4, 2, kappa = 1)
 plot(data)
 }
