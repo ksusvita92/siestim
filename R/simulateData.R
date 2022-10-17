@@ -16,8 +16,8 @@
 #' @param sigma standard deviation of the serial interval.
 #' @param pi success probability to sample secondary cases. \code{0<pi<=1}.
 #' @param w probability of non-coprimary transmissions. See "Details".
-#' @param R0 expected number of secondary cases. Each case can produce a number of
-#' secondary cases which is modeled by Poisson distribution with mean \code{R0*pi}.
+#' @param kappa expected number of contacts per case. If \code{pi > 0}, the expected number
+#' of contacts is modelled by Poisson distribution with mean \code{kappa*pi}.
 #'
 #' @return A list of data frames which include the epidata and the transmission network.
 #' The epidata includes the following information:
@@ -37,9 +37,9 @@
 #' @export
 #'
 #' @examples
-#' data <- simulateData(100, 4, 2, R0 = 1)
+#' data <- simulateData(100, 4, 2, kappa = 1)
 #' plot(data)
-simulateData <- function(n, mu, sigma, pi = .5, w = .7, R0 = 3){
+simulateData <- function(n, mu, sigma, pi = .5, w = .7, kappa = 3){
   # generate observed serial interval with par
   n1 <- rbinom(1, n, w)
   x1 <- rcgg(n1, mu, sigma, pi)
@@ -59,7 +59,7 @@ simulateData <- function(n, mu, sigma, pi = .5, w = .7, R0 = 3){
 
 
   # generate and sample descendant of ID_0
-  a <- max(round(rpois(1, R0) * pi), 1)
+  a <- max(round(rpois(1, kappa) * pi), 1)
   case_i <- c(case_i, rep("ID_0", a))
   case_j <- c(case_j, paste("ID", (nI+1):(nI+a), sep = "_"))
   ti <- rep(0, a)
@@ -80,10 +80,10 @@ simulateData <- function(n, mu, sigma, pi = .5, w = .7, R0 = 3){
     if(length(pools) == 0){
       nI <- nI + 1
       inf <- paste("ID", nI, sep = "_") # import case
-      a <- max(round(rpois(1, R0) * pi), 1)
+      a <- max(round(rpois(1, kappa) * pi), 1)
     } else{
       inf <- sample(pools, 1)
-      a <- round(rpois(1, R0) * pi)
+      a <- round(rpois(1, kappa) * pi)
     }
 
     # update case i and j
