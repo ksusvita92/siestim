@@ -3,7 +3,7 @@
 #' @description Draw plots of serial interval distribution, observed serial interval
 #' distribution, and each parameter estimate.
 #'
-#' @details The function returns the following plots:
+#' @return The function returns the following plots:
 #' \itemize{
 #'    \item \code{Serial Interval Distribution} depicts the distribution of the true serial
 #'    interval. If the transmission networks are non-unique, the serial interval distribution

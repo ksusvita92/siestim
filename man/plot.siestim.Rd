@@ -9,11 +9,7 @@
 \arguments{
 \item{x}{object of class \code{siestim}}
 }
-\description{
-Draw plots of serial interval distribution, observed serial interval
-distribution, and each parameter estimate.
-}
-\details{
+\value{
 The function returns the following plots:
 \itemize{
    \item \code{Serial Interval Distribution} depicts the distribution of the true serial
@@ -25,4 +21,8 @@ The function returns the following plots:
    \item \code{Distributions of Estimates} shows figure of the distribution of each
    estimate. If the transmission networks are non-unique, a histogram will be drawn.
 }
+}
+\description{
+Draw plots of serial interval distribution, observed serial interval
+distribution, and each parameter estimate.
 }
