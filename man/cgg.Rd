@@ -55,18 +55,17 @@ transmission
 with some unknown intermediate unsampled individuals in between). \cr\cr
 The density function is given as follows \cr
 \deqn{f(t) = \sum_m g(t|m) * Pr(M=m), t > 0, m = 0,1,...}
-\eqn{g(t|m)} is the Gamma distributed density
-function with shape \eqn{(m+1)\alpha} and rate \eqn{\beta}, and \eqn{Pr(M = m)} is the
-probability mass function of Geometric distribution. Here, \eqn{\alpha, \beta} are shape
-and rate parameters of the true serial interval distribution. \cr\cr
+where \eqn{g(t|m)} is the Gamma distributed density
+function with mean \code{mu} and standard deviation \code{sigma}, and \eqn{Pr(M = m)} is the
+probability mass function of Geometric distribution with probability \code{pi}. \cr\cr
 The quantile function is determined by solving the optimization function as follows
 \deqn{arg min_t (F(t)-p)^2,}
-where \eqn{F(t)} is the cumulative density function of CGG distribution and \eqn{p}
-is a given probability.
+where \eqn{F(t)} is the cumulative density function of CGG distribution given probability \code{p}.
 }
 \examples{
-x <- rcgg(10, 4.5, 2, .8)
+x <- rcgg(10, 4.5, 2, .7)
 fx <- dcgg(x, 4.5, 2, .7, T)
 Fx <- pcgg(x, 4.5, 2, .7)
+q <- qcgg(Fx, 4.5, 2, .7)
 
 }

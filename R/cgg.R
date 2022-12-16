@@ -10,14 +10,12 @@
 #' with some unknown intermediate unsampled individuals in between). \cr\cr
 #' The density function is given as follows \cr
 #' \deqn{f(t) = \sum_m g(t|m) * Pr(M=m), t > 0, m = 0,1,...}
-#' \eqn{g(t|m)} is the Gamma distributed density
-#' function with shape \eqn{(m+1)\alpha} and rate \eqn{\beta}, and \eqn{Pr(M = m)} is the
-#' probability mass function of Geometric distribution. Here, \eqn{\alpha, \beta} are shape
-#' and rate parameters of the true serial interval distribution. \cr\cr
+#' where \eqn{g(t|m)} is the Gamma distributed density
+#' function with mean \code{mu} and standard deviation \code{sigma}, and \eqn{Pr(M = m)} is the
+#' probability mass function of Geometric distribution with probability \code{pi}. \cr\cr
 #' The quantile function is determined by solving the optimization function as follows
 #' \deqn{arg min_t (F(t)-p)^2,}
-#' where \eqn{F(t)} is the cumulative density function of CGG distribution and \eqn{p}
-#' is a given probability.
+#' where \eqn{F(t)} is the cumulative density function of CGG distribution given probability \code{p}.
 #'
 #' @param n number of observations.
 #' @param x vector of quantiles representing the period of symptom onset times between
@@ -38,9 +36,10 @@
 #' The length of the result is determined by \code{n} for \code{rcgg}, the length of
 #' \code{x} for \code{dcgg} and \code{pcgg}, and the length of \code{p} for \code{qcgg}.
 #'
-#' @examples x <- rcgg(10, 4.5, 2, .8)
+#' @examples x <- rcgg(10, 4.5, 2, .7)
 #' fx <- dcgg(x, 4.5, 2, .7, T)
 #' Fx <- pcgg(x, 4.5, 2, .7)
+#' q <- qcgg(Fx, 4.5, 2, .7)
 #'
 #' @rdname cgg
 #' @aliases rcgg
@@ -56,35 +55,29 @@ rcgg <- function(n,mu,sigma,pi){
 #' @rdname cgg
 #' @aliases dcgg
 #' @export
-dcgg <- function(x, mu, sigma, pi, log = FALSE){
-  gt <- function(xi,mu,sigma,pi){
-    # use shape and rate
-    a <- (mu/sigma)^2; b <- mu/sigma^2
 
-    #Find maximum m within tol=1e-10
-    k <- 0; tol <- 1e-10
-    y <- 1/gamma(a)
-    v <- b^a * xi^a * (1-pi)
-    while(y>tol && y<Inf){
-      k <- k+1
-      y <- tryCatch(v^k/gamma((k+1)*a), error=function(e) return(0), warning=function(w) return(0))
-      if(is.nan(y)) y <- 0 #break the loop
-      #NaN happens when gamma((m+1)*a)=Inf or when it's not defined
-    }
-    if(k>1) mmax <- k-1
-    else mmax <- 0
-    f <- sapply(0:mmax, function(i) dgamma(xi, (i+1)*a, b) * dgeom(i, pi))
-    return(sum(f))
+dcgg <- function(x, mu, sigma, pi, log = FALSE){
+  a <- (mu/sigma)^2; b <- mu/sigma^2 #shape & rate param of gamma dist.
+
+  m <- 0
+  tol <- 1
+
+  #compute cgg dens; sum over m, stop when reaching p(m)<1e-10
+  gt <- dgamma(x, (m+1)*a, b) * dgeom(m, pi)
+  while(tol>1e-10){
+    tmp <- gt + (dgamma(x, (m+2)*a, b) * dgeom(m+1, pi))
+    if(is.finite(sum(tmp))){
+      m <- m+1
+      gt <- tmp
+      tol <- dgeom(m, pi)
+    } else break
   }
 
-  # compute the density
-  ft <- sapply(1:length(x), function(i) gt(xi=x[i], mu, sigma, pi))
-  ft[is.infinite(ft)] <- 0 # it evaluate x=0 as Inf.
 
   # is it log?
-  if(log) ft <- log(ft)
+  if(log) gt <- log(gt)
 
-  return(ft)
+  return(gt)
 }
 
 #' @rdname cgg
