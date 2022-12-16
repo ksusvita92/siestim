@@ -4,10 +4,10 @@
 \alias{logll}
 \title{The negative log-likelihood functions}
 \usage{
-logll(params, dt, prior.pi = NULL, prior.w = NULL, ctr = list())
+logll(params, dt, ctr = list())
 }
 \arguments{
-\item{prior.w}{}
+\item{ctr}{}
 }
 \value{
 
