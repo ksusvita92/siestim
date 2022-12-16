@@ -25,11 +25,11 @@ qfgd(p, mu, sigma, lower.tail = TRUE, log.p = FALSE)
 \item{x}{vector of quantiles representing the period of symptom onset times between
 a pair of infector-infectee.}
 
-\item{log, log.p}{loggical; if \code{TRUE}, the probabilities/densities \eqn{p} are returned
-as \eqn{log(p)}.}
+\item{log, log.p}{logical; if \code{TRUE}, the probabilities/densities \code{p} are returned
+as \code{log(p)}.}
 
-\item{lower.tail}{logical; if \code{TRUE}, the probabilities are returned as \eqn{Pr(X \le x)},
-otherwise \eqn{Pr(X > x)}.}
+\item{lower.tail}{logical; if \code{TRUE}, the probabilities are returned as Pr(X <= \code{x}),
+otherwise Pr(X > \code{x}).}
 
 \item{p}{vector of probabilities.}
 }
@@ -53,12 +53,12 @@ which is derived from Gamma Difference Distribution [1]. The function has non-ne
 real number support and is expressed as follows \cr
 \deqn{f(t) = 2 \int g(s)*g(s-t) ds,} \cr
 for \eqn{t \ge 0} and \eqn{t \le s \le \infty}. Here, \eqn{g(t), t > 0} is the density of
-the true serial interval following Gamma distribution having shape \eqn{\alpha} and rate
-\eqn{\beta}. \cr\cr
+the true serial interval following Gamma distribution having mean \code{mu} and standard deviation
+\code{sigma}. \cr\cr
 The quantile function is determined by solving the optimization function as follows
 \deqn{arg min_t (F(t)-p)^2,}
-where \eqn{F(t)} is the cumulative density function of FGD distribution and \eqn{p}
-is a given probability.
+where \eqn{F(t)} is the cumulative density function of FGD distribution
+given probability \code{p}.
 }
 \examples{
 x <- rfgd(10, 4.5, 2)

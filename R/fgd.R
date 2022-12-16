@@ -11,12 +11,12 @@
 #' real number support and is expressed as follows \cr
 #' \deqn{f(t) = 2 \int g(s)*g(s-t) ds,} \cr
 #' for \eqn{t \ge 0} and \eqn{t \le s \le \infty}. Here, \eqn{g(t), t > 0} is the density of
-#' the true serial interval following Gamma distribution having shape \eqn{\alpha} and rate
-#' \eqn{\beta}. \cr\cr
+#' the true serial interval following Gamma distribution having mean \code{mu} and standard deviation
+#' \code{sigma}. \cr\cr
 #' The quantile function is determined by solving the optimization function as follows
 #' \deqn{arg min_t (F(t)-p)^2,}
-#' where \eqn{F(t)} is the cumulative density function of FGD distribution and \eqn{p}
-#' is a given probability.
+#' where \eqn{F(t)} is the cumulative density function of FGD distribution
+#' given probability \code{p}.
 #'
 #' @param n number of observations.
 #' @param x vector of quantiles representing the period of symptom onset times between
@@ -24,10 +24,10 @@
 #' @param p vector of probabilities.
 #' @param mu mean parameter of the serial interval distribution.
 #' @param sigma standard deviation parameter of the serial interval distribution.
-#' @param log,log.p loggical; if \code{TRUE}, the probabilities/densities \eqn{p} are returned
-#' as \eqn{log(p)}.
-#' @param lower.tail logical; if \code{TRUE}, the probabilities are returned as \eqn{Pr(X \le x)},
-#' otherwise \eqn{Pr(X > x)}.
+#' @param log,log.p logical; if \code{TRUE}, the probabilities/densities \code{p} are returned
+#' as \code{log(p)}.
+#' @param lower.tail logical; if \code{TRUE}, the probabilities are returned as Pr(X <= \code{x}),
+#' otherwise Pr(X > \code{x}).
 #'
 #' @return \code{rfgd} generates random variables, \code{dfgd} returns the density,
 #' \code{pfgd} returns the cumulative density,  and \code{qfgd} returns the quantile
@@ -74,7 +74,7 @@ dfgd <- function(x, mu, sigma, log = FALSE){
                      error = function(e) return(0))
     } else ht <- 0
 
-    if(is.nan(ht)) ht <- 0 #happens because we may multiply 0 and Inf
+    #if(is.nan(ht)) ht <- 0 #happens because we may multiply 0 and Inf
     return(ht)
   }
 
