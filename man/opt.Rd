@@ -4,10 +4,10 @@
 \alias{opt}
 \title{The optimization function}
 \usage{
-opt(params0, dt, lower, upper, prior.pi = NULL, prior.w = NULL, ctr = list())
+opt(params0, dt, lower, upper, ctr = list())
 }
 \arguments{
-\item{prior.w}{}
+\item{ctr}{}
 }
 \value{
 
