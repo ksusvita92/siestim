@@ -6,12 +6,6 @@
 \usage{
 new_plotsi(x)
 }
-\arguments{
-\item{x}{}
-}
-\value{
-
-}
 \description{
 Define class plotsi
 }
