@@ -6,12 +6,6 @@
 \usage{
 new_siestim(x)
 }
-\arguments{
-\item{x}{}
-}
-\value{
-
-}
 \description{
 Define class "siestim"
 }
