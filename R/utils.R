@@ -6,7 +6,6 @@
 #'
 #' @return
 logll <- function(params, dt, ctr = list()){
-  print(params)
   # put constraints (important when doing optimization and computing hessian)
   if(params[1]<=0) params[1] <- 1e-5 # mean> 0
   if(params[2]<=0) params[2] <- 1e-5 # sd>0
