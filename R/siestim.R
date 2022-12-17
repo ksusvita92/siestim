@@ -80,6 +80,7 @@ siestim <- function(x, init, lower, upper, control = list(ncore = 2)){
   lower <- ifelse(lower < 0, 0, lower)
   upper[3:4] <- ifelse(upper[3:4] > 1, 1, upper[3:4])
 
+
   if(is.numeric(x) || (is.list(x) && length(x)==1)){
     # run the optimization
     if(is.list(x)) x <- x[[1]]
