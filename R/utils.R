@@ -6,6 +6,16 @@
 #'
 #' @return
 logll <- function(params, dt, ctr = list()){
+  print(params)
+  # put constraints (important when doing optimization and computing hessian)
+  if(params[1]<0) params[1] <- 0 # mean>= 0
+  if(params[2]<0) params[2] <- 0 # sd>=0
+  if(params[3]==0) params[3] <- 1e-5 # pi>0; dgeom is NaN when pi<=0
+  if(params[4]<0) params[4] <- 0 # w>=0
+  if(params[3]>1) params[3] <- 1 #pi<=1; dgeom is NaN when pi>1
+  if(params[4]>1) params[4] <- 1 # 0<=w<=1
+
+
   # see if mle or map is used
   if(is.null(ctr$prior.pi)) fp <- 1 else fp <- ctr$prior.pi
   if(is.null(ctr$prior.w)) fw <- 1 else fw <- ctr$prior.w
@@ -16,8 +26,8 @@ logll <- function(params, dt, ctr = list()){
   f1 <- dcgg(dt, params[1], params[2], params[3])
   f2 <- dfgd(dt, params[1], params[2])
   #avoid log(0), log(Inf); give some offsets
-  f1[f1==0 | !is.finite(f1)] <- f2[f2==0 | !is.finite(f1)] <- 1e-300 #non-finite occurs when e.g dgamma(0,.1,2)
   ft <- params[4]*f1 + (1-params[4])*f2
+  ft[ft==0 | !is.finite(ft)] <- 1e-300 #non-finite occurs when e.g dgamma(0,.1,2)
   if(fm == 0 || !is.finite(fm)) fm <- 1e-300
   if(fs == 0 || !is.finite(fs)) fs <- 1e-300
   if(fp == 0 || !is.finite(fp)) fp <- 1e-300
@@ -43,7 +53,6 @@ logll <- function(params, dt, ctr = list()){
 #' @importFrom numDeriv hessian
 #'
 #' @return
-#' @export
 opt <- function(params0, dt, lower, upper, ctr = list()){
   # omit NA
   dt <- dt[!is.na(dt)]
