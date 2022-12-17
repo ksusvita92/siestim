@@ -8,9 +8,9 @@
 logll <- function(params, dt, ctr = list()){
   print(params)
   # put constraints (important when doing optimization and computing hessian)
-  if(params[1]<0) params[1] <- 0 # mean>= 0
-  if(params[2]<0) params[2] <- 0 # sd>=0
-  if(params[3]==0) params[3] <- 1e-5 # pi>0; dgeom is NaN when pi<=0
+  if(params[1]<=0) params[1] <- 1e-5 # mean> 0
+  if(params[2]<=0) params[2] <- 1e-5 # sd>0
+  if(params[3]<=0) params[3] <- 1e-5 # pi>0; dgeom is NaN when pi<=0
   if(params[4]<0) params[4] <- 0 # w>=0
   if(params[3]>1) params[3] <- 1 #pi<=1; dgeom is NaN when pi>1
   if(params[4]>1) params[4] <- 1 # 0<=w<=1
