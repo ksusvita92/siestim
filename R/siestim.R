@@ -76,6 +76,9 @@
 #' plot(est)
 #'
 siestim <- function(x, init, lower, upper, control = list(ncore = 2)){
+  # check bounds
+  lower <- ifelse(lower < 0, 0, lower)
+  upper[3:4] <- ifelse(upper[3:4] > 1, 1, upper[3:4])
 
   if(is.numeric(x) || (is.list(x) && length(x)==1)){
     # run the optimization
@@ -99,13 +102,12 @@ siestim <- function(x, init, lower, upper, control = list(ncore = 2)){
     registerDoSNOW(cl)
 
     res <- foreach(i=1:length(x), .combine = rbind,
-                   .export = c("dcgg", "dfgd", "logll", "opt","siestim"),
+                   .export = c("dcgg", "dfgd", "logll", "opt"),
                    .errorhandling="pass", .options.snow = list(progress=prog)) %dopar% {
                      .GlobalEnv$dcgg <- dcgg
                      .GlobalEnv$dfgd <- dfgd
                      .GlobalEnv$logll <- logll
                      .GlobalEnv$opt <- opt
-                     .GlobalEnv$siestim <- siestim
 
                      myest <- tryCatch(opt(init, x[[i]], lower, upper, control),
                                        error = function(e){
@@ -114,8 +116,10 @@ siestim <- function(x, init, lower, upper, control = list(ncore = 2)){
                                          return(list(par=par, se=se, logll=NA, msg=conditionMessage(e)))
                                        })
                      names(myest$se) <- paste("se", names(myest$se), sep = ".")
-                     out <- as.list(c(myest$par, myest$se))
-                     cbind(as.data.frame(out), logll = myest$logll, msg = myest$msg)
+                     out <- as.data.frame(as.list(c(myest$par, myest$se)))
+                     out$logll <- myest$logll
+                     out$msg <- myest$msg
+                     out
                    }
 
     stopCluster(cl)
