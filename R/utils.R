@@ -19,6 +19,7 @@ logll <- function(params, dt, ctr = list()){
 
   # result
   nll <- -sum(log(ft))-log(fp)-log(fw)-log(fm)-log(fs)
+  if(!is.finite(nll)) nll <- log(1e-300) #dfoptim got error if nll if not finite.
 
   return(nll)
 }
