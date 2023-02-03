@@ -5,11 +5,11 @@ Welcome to the `siestim` project! The project aims to estimate serial interval d
 
 
 This page is dedicated as a tutorial and complimentary of paper 
-**Serial Interval Estimation**, by
+**A Method to Estimate Serial Interval Distribution**, by
 Kurnia Susvitasari, Paul Tupper, Jessica Stockdale, Caroline Colijn
 
 
-## Installing *siestim* package
+## Installing the *siestim* package
 To install the package, you will need the `remotes` package:
 
 ```r
