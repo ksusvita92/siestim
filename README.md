@@ -24,5 +24,5 @@ Once installed, the package can be loaded using:
 library("siestim")
 ```
 
-## Tutorial and asking questions
+## Contact
 - For general questions and bug reports, please contact <ksusvita@gmail.com>
