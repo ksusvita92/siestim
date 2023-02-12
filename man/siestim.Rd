@@ -10,14 +10,14 @@ siestim(x, init, lower, upper, control = list(ncore = 2))
 \item{x}{vector or a list of vectors of the observed symptom onset interval between a pair
 of infector-infectee. See 'Details'.}
 
-\item{init}{initial values of the estimates (\code{mu}, \code{sigma}, \code{pi}, \code{w}), where \code{pi}, \code{sigma} > 0,
+\item{init}{initial values of the estimates (\code{mu}, \code{sigma}, \code{pi}, \code{w}), where \code{mu}, \code{sigma} > 0,
 0 < \code{pi} <= 1 and
-0 <= \code{w} <= 1. See "Details".}
+0 <= \code{w} <= 1. See 'Details'.}
 
 \item{lower, upper}{bounds on the estimates, cannot be \code{NA} or \code{NULL}. By order,
 it is \code{mu}, \code{sigma}, \code{pi}, \code{w}.}
 
-\item{control}{a list of control parameters. See "Details".}
+\item{control}{a list of control parameters. See 'Details'.}
 }
 \value{
 The function returns the following values: \cr
@@ -26,6 +26,7 @@ The function returns the following values: \cr
   \item \code{se}: standard error of each estimate.
   \item \code{logll}: log-likelihood value evaluated at \code{par}.
   \item \code{msg}: convergence message of the optimization.
+  \item \code{record}: data frame representation of the estimates and their standard errors.
 }
 }
 \description{
