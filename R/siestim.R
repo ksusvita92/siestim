@@ -40,12 +40,12 @@
 #'
 #' @param x vector or a list of vectors of the observed symptom onset interval between a pair
 #' of infector-infectee. See 'Details'.
-#' @param init initial values of the estimates (\code{mu}, \code{sigma}, \code{pi}, \code{w}), where \code{pi}, \code{sigma} > 0,
+#' @param init initial values of the estimates (\code{mu}, \code{sigma}, \code{pi}, \code{w}), where \code{mu}, \code{sigma} > 0,
 #' 0 < \code{pi} <= 1 and
-#' 0 <= \code{w} <= 1. See "Details".
+#' 0 <= \code{w} <= 1. See 'Details'.
 #' @param lower,upper bounds on the estimates, cannot be \code{NA} or \code{NULL}. By order,
 #' it is \code{mu}, \code{sigma}, \code{pi}, \code{w}.
-#' @param control a list of control parameters. See "Details".
+#' @param control a list of control parameters. See 'Details'.
 #'
 #' @import foreach
 #' @import parallel
@@ -58,6 +58,7 @@
 #'   \item \code{se}: standard error of each estimate.
 #'   \item \code{logll}: log-likelihood value evaluated at \code{par}.
 #'   \item \code{msg}: convergence message of the optimization.
+#'   \item \code{record}: data frame representation of the estimates and their standard errors.
 #' }
 #'
 #' @export
