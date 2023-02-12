@@ -12,12 +12,13 @@
 \value{
 The function returns the following plots:
 \itemize{
-   \item \code{Serial Interval Distribution} depicts the distribution of the true serial
-   interval. If the transmission networks are non-unique, the serial interval distribution
-   of each network will be drawn in gray color, and the final distribution will be drawn in
+   \item \code{Serial Interval Distribution} depicts the distribution of the Gamma-distributed
+   serial interval with mean \code{mu} and standard deviation \code{sigma}. If the transmission
+   networks are non-unique, the distribution
+   of each network will be drawn in gray color, and the final estimated distribution will be drawn in
    coral color.
-   \item \code{Obs. Serial Interval Distribution} depicts the distribution of the observed serial
-   interval. The density is a mixture of non-coprimary transmission and coprimary transmission.
+   \item \code{Mixture Distribution} depicts the densities of the mixture model and
+   its mixture components (coprimary and non-coprimary).
    \item \code{Distributions of Estimates} shows figure of the distribution of each
    estimate. If the transmission networks are non-unique, a histogram will be drawn.
 }
