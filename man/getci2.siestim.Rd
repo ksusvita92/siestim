@@ -30,9 +30,4 @@ For an estimate \eqn{\theta}, the interval is estimated as follows \cr
 \deqn{\theta - z_{a/2}*se(\theta), \theta - z_{a/2}*se(\theta)}
 where \eqn{z_a} is \code{(1-a)}-th quantile of the standard Normal distribution,
 and \eqn{se(\theta)} is the estimated standard error of \eqn{\theta}.
-
-For an estimate \eqn{\theta}, the interval is estimated such that \cr
-\deqn{}
-where \eqn{z_a} is \code{(1-a)}-th quantile of the standard Normal distribution,
-and \eqn{se(\theta)} is the estimated standard error of \eqn{\theta}.
 }
