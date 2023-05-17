@@ -3,11 +3,6 @@
 #' Estimate the \code{(1-a)}-level confidence interval of each parameter's estimate
 #' from class \code{siestim}.
 #'
-#' @details
-#' For an estimate \eqn{\theta}, the interval is estimated such that \cr
-#' \deqn{}
-#' where \eqn{z_a} is \code{(1-a)}-th quantile of the standard Normal distribution,
-#' and \eqn{se(\theta)} is the estimated standard error of \eqn{\theta}.
 #'
 #' @param x object of class \code{siestim}.
 #' @param level confidence interval level; default is 0.95.
