@@ -13,7 +13,7 @@
 #' @param level confidence interval level; default is 0.95.
 #'
 #' @return confidence interval matrix.
-
+#' @export
 #'
 #' @examples
 getci2.siestim <- function(x, level = .95){
