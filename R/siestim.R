@@ -57,6 +57,7 @@
 #'   \item \code{par}: point estimation of each parameter.
 #'   \item \code{se}: standard error of each estimate.
 #'   \item \code{logll}: log-likelihood value evaluated at \code{par}.
+#'   \item \code{data}: serial interval data.
 #'   \item \code{msg}: convergence message of the optimization.
 #'   \item \code{record}: data frame representation of the estimates and their standard errors.
 #' }
@@ -83,6 +84,7 @@ siestim <- function(x, init, lower, upper, control = list(ncore = 2)){
 
 
   if(is.numeric(x) || (is.list(x) && length(x)==1)){
+    nx <- 1
     # run the optimization
     if(is.list(x)) x <- x[[1]]
     output <- tryCatch(opt(init, x, lower, upper, control),
@@ -92,9 +94,12 @@ siestim <- function(x, init, lower, upper, control = list(ncore = 2)){
                       return(list(par=par, se=se, logll = NA, msg=conditionMessage(e)))
                     })
 
+    output$control <- control
+    output$data <- x
     output$record <- cbind(as.data.frame(as.list(c(output$par, output$se))), logll = output$logll, msg = output$msg)
     names(output$record)[5:8] <- paste("se", names(output$se), sep = ".")
   } else if(is.list(x) && length(x)>1){
+    nx <- length(x)
     #create text progress bar
     pb <- txtProgressBar(max = length(x), title = "siestim", label = "Progress...", style = 3)
     prog <- function(n) setTxtProgressBar(pb, n)
@@ -133,8 +138,9 @@ siestim <- function(x, init, lower, upper, control = list(ncore = 2)){
     par <- sapply(tmp[,1:4], function(x) mean(x, na.rm = T))
     se <- sqrt(sapply(tmp[,5:8]^2, function(x) mean(x, na.rm = T)) + sapply(tmp[,1:4], function(x) var(x, na.rm = T)))
     names(se) <- names(par)
+    loglike <- logll(par, unlist(x), control)/nx
 
-    output <- list(par = par, se = se, logll = res$logll, msg = res$msg, record = res)
+    output <- list(par = par, se = se, logll = -loglike, control = control, data = x, msg = res$msg, record = res)
   }
 
   new_siestim(output)

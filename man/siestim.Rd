@@ -25,6 +25,7 @@ The function returns the following values: \cr
   \item \code{par}: point estimation of each parameter.
   \item \code{se}: standard error of each estimate.
   \item \code{logll}: log-likelihood value evaluated at \code{par}.
+  \item \code{data}: serial interval data.
   \item \code{msg}: convergence message of the optimization.
   \item \code{record}: data frame representation of the estimates and their standard errors.
 }
