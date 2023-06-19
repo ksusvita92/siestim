@@ -16,7 +16,7 @@
 #' @export
 #'
 #' @examples
-getci2.siestim <- function(x, level = .95){
+getci.siestim <- function(x, level = .95){
   #confidence interval using std normal dist.
   z <- qnorm(level + (1 - level)/2)
   se <- x$se
