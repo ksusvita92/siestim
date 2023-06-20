@@ -140,7 +140,7 @@ siestim <- function(x, init, lower, upper, control = list(ncore = 2)){
     names(se) <- names(par)
     loglike <- logll(par, unlist(x), control)/nx
 
-    output <- list(par = par, se = se, logll = -loglike, control = control, data = x, msg = res$msg, record = res)
+    output <- list(par = par, se = se, logll = -loglike, control = control, msg = res$msg, record = res)
   }
 
   new_siestim(output)
