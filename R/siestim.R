@@ -108,7 +108,7 @@ siestim <- function(x, init, lower, upper, control = list(ncore = 2)){
     cl <- makeCluster(control$ncore, type = "SOCK")
     registerDoSNOW(cl)
 
-    res <- foreach(i=1:length(x), .combine = rbind,
+    res <- foreach(i=1:length(x), .combine = bind_rows,
                    .export = c("dcgg", "dfgd", "logll", "opt"),
                    .errorhandling="pass", .options.snow = list(progress=prog)) %dopar% {
                      .GlobalEnv$dcgg <- dcgg
