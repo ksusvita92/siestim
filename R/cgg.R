@@ -110,7 +110,7 @@ pcgg <- function(x, mu, sigma, pi, lower.tail = TRUE, log.p = FALSE){
 #' @export
 qcgg <- function(p, mu, sigma, pi, lower.tail = TRUE, log.p = FALSE){
   obj <- function(x, quantile, mu, sigma, pi, lower.tail, log.p){
-    (pcgg(x, mu, sigma, pi, lower.tail, log.p = T) - quantile)^2
+    (pcgg(x, mu, sigma, pi, lower.tail, log.p) - quantile)^2
   }
 
   res <- sapply(p, function(i) nlminb(mu, obj, quantile = i, mu = mu, sigma = sigma, pi = pi, lower.tail = lower.tail, log.p = log.p, lower = 1e-300, upper = Inf)$par)
