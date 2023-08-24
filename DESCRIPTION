@@ -10,6 +10,8 @@ Description: Estimate the serial interval distribution.
 Depends: R (>= 3.6.0)
 Imports: dfoptim, numDeriv, foreach, doSNOW, parallel, tcltk, ggplot2, patchwork, visNetwork, dplyr
 Remotes: 
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
