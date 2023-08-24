@@ -27,7 +27,6 @@
 #' @import ape
 #' @import adegenet
 #' @import dplyr
-#' @import Epiestim
 #'
 #' @return The function returns the following values: \cr
 #' \itemize{
