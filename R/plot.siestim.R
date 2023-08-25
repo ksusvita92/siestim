@@ -124,6 +124,8 @@ plot.siestim <- function(x){
 
 
   # output
-  out <- list((plsi+plosi), (plmu+plsg)/(plpi+plw))
-  new_plotsi(out)
+  out <- list(density = (plsi+plosi), est_hist = (plmu+plsg)/(plpi+plw))
+  return(out)
+  #new_plotsi(out)
+
 }

@@ -4,7 +4,7 @@
 \alias{plot.siestim}
 \title{Plot Serial Interval Estimation}
 \usage{
-plot.siestim(x)
+\method{plot}{siestim}(x)
 }
 \arguments{
 \item{x}{object of class \code{siestim}}
