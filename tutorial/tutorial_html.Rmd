@@ -1,0 +1,246 @@
+---
+title: "Tutorial for siestim"
+author: "Kurnia Susvitasari"
+date: "2023-08-25"
+output: html_document
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+siestim is an R package that estimates the serial interval distribution in incomplete sampling data. The input is a vector (or a list of vectors) of the serial interval data. Given the data, siestim will estimate not only the parameters (mean and standard deviation) of the serial interval distribution, but also the parameters that explain the data incompleteness, e.g. the success probability of sampling the secondary case in a transmission chain.
+
+The package is created as a complementary for paper "A Method to Estimate Serial Interval Distribution Under Partially-sampled Data", which is co-author by Kurnia Susvitasari, Paul Tupper, Jessica Stockadale, and Caroline Colijn.
+
+To install the package, you can run the following R command
+```{r install siestim, eval=FALSE}
+remotes::install_github("ksusvita92/siestim")
+```
+
+Once installed, you should be able to call the package using:
+```{r call siestim, eval=T, warning=FALSE, message=FALSE}
+library(siestim)
+```
+
+
+<!-- This tutorial consists of three parts. In the first part, we will introduce two distributions that model the serial interval data under incomplete sampling. In the second part, we will simulate an SIR outbreak together with the sequence alignment of all infected cases -->
+This tutorial consists of two parts. In the first half, we will simulate a data set of observed serial intervals directly from the Compound Geometric Gamma (CGG) distribution and the Folded Gamma Difference (FGD) distribution; see [1]. Then, we will estimate the following parameters of interest:
+
+  * mean (mu) of the serial interval distribution,
+  * standard deviation (sigma) of the serial interval distribution
+  * success probability (pi) of sampling the secondary case
+  * proportion of non-coprimary transmission (w); see [1].
+
+In the second half, we will simulate an SIR outbreak and then we will estimate the same parameters of interest as above. This section is to show that siestim can also be implemented in a data set that contains stochastic uncertainty.
+
+
+## Distribution-based Simulation
+
+Under incomplete sampling, the infector-infectee pairs may not represent direct transmissions. We differentiate two types of transmission: coprimary and non-coprimary. Coprimary transmission is defined as a pair in which both the infector and infectee were directly infected by the same unsampled case; non-coprimary transmission includes both direct transmission and inderect transmission (a pair in which the infector and infectee is separated by at least one unsampled cases). 
+
+We model the serial intervals that come from coprimary transmission using FGD distribution and those come from non-coprimary transmission using CGG distribution. The idea of siestim is to use mixture model to estimate the parameters of interest.
+
+
+### Folded Gamma Difference (FGD) Distribution
+
+Suppose $X_{xi}$ and $X_{xj}$ represent the serial intervals between transmission pair $x \rightarrow i$ and $x \rightarrow j$ where $x$ is an unsampled case. Then, a random variable 
+
+\[
+  Y=|X_{xi}-X_{xj}|
+\]
+
+represents the symptom onset difference between $i$ and $j$. In this case, the transmission pair $i \rightarrow j$ is referred to coprimary transmission and thereby, is modeled by the FGD distribution.
+
+To generate random samples from FGD distribution of size 1000 with mean 4 days and standard deviation 2 days, you can run the following commands
+```{r fgd, fig.show='hold', fig.height=4, fig.width=7}
+set.seed(12)
+x <- rfgd(1000, 4, 2)
+
+# Fitting the histogram with the density
+par(mfrow = c(1,2))
+hist(x, breaks = 50, freq = F, xlab = "days", main = "FGD distribution")
+lines(sort(x), dfgd(sort(x), 4, 2), col = "red")
+base::plot(sort(x), pfgd(sort(x), 4, 2), xlab = "days", ylab = "Probability", main = "Cumulative Probability", type = "l", col = "red")
+```
+
+siestim also provides density, cumulative probability, and quantile functions of a FGD distribution; see `?fgd`.
+
+
+### Compound Geometric Gamma (CGG) Distribution
+
+Suppose that the transmission pair $i \rightarrow j$ is separated by $m=1,\ldots,M$ unsampled cases; if $m=0$, it means that $i \rightarrow j$ is a direct transmission. 
+\[
+  i \rightarrow person_1 \rightarrow \ldots \rightarrow person_M \rightarrow j
+\]
+
+Assuming the serial intervals in a transmission chain are identically distributed and independent, the symptom onset difference between case $i$ and $j$ is the convolution over all underlying serial intervals in the transmission pair $i \rightarrow j$, that is
+\[
+  Y = X_{i person_1} + \ldots + X_{person_M j}
+\]
+
+In this case, $Y$ is modeled by CGG distribution having parameters $(\mu, \sigma, \pi)$; $\pi$ is the success probability of sampling the secondary case.
+
+To generate random samples from CGG distribution of size 1000 with mean 6 days, standard deviation 1 days, and success probability 0.6, you can run the following commands
+```{r cgg, fig.show='hold', fig.height=4, fig.width=7}
+set.seed(12)
+x <- rcgg(1000, 6, 1, .6)
+
+# Fitting the histogram with the density
+par(mfrow = c(1,2))
+hist(x, breaks = 50, freq = F, xlab = "days", main = "FGD distribution")
+lines(sort(x), dcgg(sort(x), 6, 1, .6), col = "red")
+base::plot(sort(x), pcgg(sort(x), 6, 1, .6), xlab = "days", ylab = "Probability", main = "Cumulative Probability", type = "l", col = "red")
+```
+
+siestim also provides density, cumulative probability, and quantile functions of a FGD distribution; see `?cgg`.
+
+
+### Parameter Estimation
+
+To perform parameter estimation, we need to generate a collection of serial interval data first. You can generate random samples of size 500 with parameters:
+
+* $\mu=4$ days
+* $\sigma=2$ days
+* $\pi=.7$
+* $w=.6$
+
+by running these following commands
+```{r simulation}
+# true parameters
+mu <- 4; sigma <- 2; pi <- .75; w <- .6
+
+set.seed(12)
+n <- rbinom(1, 500, w)
+x <- c(rcgg(n, mu, sigma, pi), rfgd(500-n, mu, sigma))
+```
+
+To estimate the parameters of interest, you can run
+```{r est}
+iv <- c(5,3,.5,.5) # initial values of the estimates
+lb <- rep(0, 4) # lower bound of the estimates
+ub <- c(10, 5, 1, 1) # upper bound of the estimates
+
+myest <- siestim(x, iv, lb, ub)
+myest
+```
+
+As well, you can estimate the 95% confidence intervals for each estimate by running the following command
+```{r ci}
+getci(myest, .95)
+```
+
+
+## SIR Simulation
+
+You can generate an influenza-like outbreak using siestim using a function called `simOutbreak`. The function generates an SIR outbreak together with, for every infected case, the DNA sequences and epidemiological data (who infected whom, time of infection and recovery). 
+
+Suppose you want to generate an outbreak with these parameters:
+
+* population size: 500
+* epidemic duration: 100 days
+* initial infected case: 1
+* reproduction number, $R_0$: 2
+* generation interval: $\Gamma(4,2)$
+* importation rate: 0.01
+* transversion rate: $5 \times 10^{-5}$
+* transition rate: $10^{-4}$
+
+Then, you can run
+```{r sir, fig.height=4, fig.width=6}
+set.seed(12)
+myoutbreak <- simOutbreak(500, c(4,2))
+
+par(oma=c(0, 0, 0, 5))
+base::plot(0:100, myoutbreak$dynam$nsus, type = "l", col = "darkgreen", xlab = "day", ylab = "Count")
+lines(0:100, myoutbreak$dynam$ninf, col = "red")
+lines(0:100, myoutbreak$dynam$nrec, col = "blue")
+legend(par('usr')[2], par('usr')[4], bty = 'n', xpd = NA, legend = c("susceptible", "infected", "recovery"), fill = c("darkgreen", "red", "blue"))
+```
+
+
+### Reconstruct a Transmission Cloud
+
+Assuming that we sample only $p$ proportion of infected cases and we do not know the true transmission pairs. In this case, we need to reconstruct all plausible transmission pairs from the genomic data. We say that case $i$ and $j$ are linked as an infector-infectee pair if their genomic distance is less than a non-negative threshold $\varepsilon$. We refer all plausible transmission pairs as *transmission cloud*.
+
+You can sample $p=.6$ of the infected cases to reconstruct the transmission cloud with the genomic distance cutoff $\varepsilon=18$ SNPs using 
+<!-- The following commands sample $p=.6$ and generate a transmission cloud with $\varepsilon=18$ SNPs. -->
+```{r tc, message=FALSE, warning=FALSE}
+mytc <- createTC(myoutbreak, .6, 18, seed = 12)
+
+# true transmission tree
+adegenet::plot(mytc$tt,
+     thin = F,
+     x_axis = "inf.times",
+     node_color = "group",
+     node_value = 1,
+     col_pal = c(unsampled = "black", sampled = "gold"),
+     arrow_size = .5,
+     node_size = 5,
+     edge_width = .5,
+     node_width = .5,
+     height = 800,
+     width = 600,
+     label = F)
+
+# plot transmission cloud
+library(dplyr)
+library(visNetwork)
+tc_nodes <- mytc$tt$linelist %>%
+  filter(group == "sampled") %>%
+  select(id)
+tc_edges <- data.frame(from = mytc$tc$inf.source, to = mytc$tc$inf.ID, arrows = "to")
+visNetwork(tc_nodes, tc_edges, width = "100%", height = "500px") %>%
+  visOptions(highlightNearest = list(enabled = TRUE, algorithm = "hierarchical")) %>%
+  visNodes(size = 25) %>%
+  visEdges(width = 5, color = "black") %>%
+  visLegend() %>%
+  visLayout(randomSeed = 12)
+```
+
+
+
+### Parameter Estimation
+
+Sometimes we may be uncertain about which cases are truly linked. For a given case, there may be multiple other cases that may have infected them (see the transmission cloud above). To handle this extra source of uncertainty, we sample a collection of transmission trees consistent with it, and then estimate the parameters of interest over all sampled trees.
+
+To sample, say, 100 transmission trees from given transmission cloud, you can run
+```{r tt}
+mytt <- lapply(1:100, function(i){
+  mytc$tc %>%
+    group_by(inf.ID) %>%
+    slice_sample(n = 1) %>%
+    pull(si)
+})
+```
+
+We estimate the serial interval distribution using the collection of serial interval data sets above. The following command allows you to run siestim in parallel; see `?parallel::detectCores()` for detail.
+```{r est2, results='hide'}
+myest <- siestim(mytt, iv, lb, ub, list(ncore = parallel::detectCores()))
+```
+
+```{r est2_1}
+myest
+```
+
+To plot the siestim output, you can use
+```{r siestim_plot, warning=FALSE, message=FALSE, fig.height=4, fig.width=7}
+siestim::plot(myest)
+```
+
+You can also estimate the 95% confidence interval using
+```{r ci2}
+getci(myest, .95)
+```
+
+The function siestim allows you to include prior distributions on each parameter $\mu,\sigma,\pi,w$. For more detail, see `?siestim`.
+
+
+
+^[Stockdale, J.E., Susvitasari, K., Tupper, P. et al. Genomic epidemiology offers high resolution estimates of serial intervals for COVID-19. *Nat Commun* **14**, 4830 (2023).]
+
+
