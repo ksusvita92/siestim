@@ -41,7 +41,7 @@ The length of the result is determined by \code{n} for \code{rfgd}, the length o
 \code{x} for \code{dfgd} and \code{pfgd}, and the length of \code{p} for \code{qfgd}.
 }
 \description{
-Random generator, density, cumulative density, and quantile functions of
+Random generator, density, cumulative probability, and quantile functions of
 a Folded Gamma Difference (FGD) distribution.
 }
 \details{

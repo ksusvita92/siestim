@@ -1,6 +1,6 @@
 #' Folded Gamma Difference
 #'
-#' @description Random generator, density, cumulative density, and quantile functions of
+#' @description Random generator, density, cumulative probability, and quantile functions of
 #' a Folded Gamma Difference (FGD) distribution.
 #'
 #' @details The distribution is to model the observed serial interval distribution coming from
