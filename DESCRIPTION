@@ -1,6 +1,6 @@
 Package: siestim
 Type: Package
-Title: Serial Interval Estimation
+Title: Serial Interval Estimation Under Partially-sampled Data
 Version: 0.1.0
 Author: c(person(given = "Kurnia",
                  family = "Susvitasari",
