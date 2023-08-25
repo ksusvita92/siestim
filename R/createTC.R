@@ -12,9 +12,8 @@
 #' @param dna_model DNA evolution model; see Details
 #' @param seed seed number
 #'
-#' @import epicontacts
-#' @import igraph
-#' @import dplyr
+#' @importFrom epicontacts make_epicontacts
+#' @importFrom igraph graph_from_data_frame shortest_paths
 #'
 #' @return The function returns the following outputs:\cr
 #' \itemize{
@@ -59,6 +58,7 @@ createTC.simOutbreak <- function(outbreak,
                      dna_model = "N",
                      seed = 1){
 
+  library(dplyr)
   set.seed(seed)
   # downsampling the true transmission tree
   unsampled <- outbreak$epidata %>%
