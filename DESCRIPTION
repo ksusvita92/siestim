@@ -8,7 +8,7 @@ Author: c(person(given = "Kurnia",
                  email = "ksusvita@gmail.com")
 Description: Estimate the serial interval distribution.
 Depends: R (>= 3.6.0)
-Imports: dfoptim, numDeriv, foreach, doSNOW, parallel, tcltk, ggplot2, patchwork, visNetwork, dplyr, ape, EpiEstim
+Imports: dfoptim, numDeriv, foreach, doSNOW, parallel, tcltk, ggplot2, patchwork, visNetwork, dplyr, ape, EpiEstim, epicontacts
 Remotes: 
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
