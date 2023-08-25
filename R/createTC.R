@@ -12,7 +12,7 @@
 #' @param dna_model DNA evolution model; see Details
 #' @param seed seed number
 #'
-#' @importFrom epicontacts make_epicontacts
+#' @import epicontacts
 #' @importFrom igraph graph_from_data_frame shortest_paths
 #'
 #' @return The function returns the following outputs:\cr
