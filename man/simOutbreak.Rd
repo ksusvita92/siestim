@@ -12,6 +12,7 @@ simOutbreak(
   transi_rate = 1e-04,
   transv_rate = transi_rate/2,
   seq_length = 10000,
+  import_rate = 0.01,
   minimum_case = 10
 )
 }
@@ -29,6 +30,8 @@ simOutbreak(
 \item{transv_rate}{transversion rate; see Details}
 
 \item{seq_length}{sequence length to be generated}
+
+\item{import_rate}{importation rate (per day)}
 
 \item{minimum_case}{minimum number of infected cases; see Details}
 }

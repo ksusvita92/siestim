@@ -21,12 +21,12 @@
 #' @param transi_rate transition rate; see Details
 #' @param transv_rate transversion rate; see Details
 #' @param seq_length sequence length to be generated
+#' @param import_rate importation rate (per day)
 #' @param minimum_case minimum number of infected cases; see Details
 #'
 #' @importFrom EpiEstim discr_si
 #' @import ape
 #' @import adegenet
-#' @import dplyr
 #'
 #' @return The function returns the following values: \cr
 #' \itemize{
@@ -65,11 +65,12 @@ simOutbreak <- function(initial_sus = 200,
                         transi_rate = 1e-4,
                         transv_rate = transi_rate/2,
                         seq_length = 1e4,
+                        import_rate = .01,
                         minimum_case = 10){
   ##FROM OUTBREAKER
   theoutbreak <- function(R0, infec.curve, n.hosts=200, duration=50,
                           seq.length, mu.transi=transi_rate, mu.transv=transv_rate,
-                          rate.import.case=0.01, diverg.import=10, group.freq=1,
+                          rate.import.case=import_rate, diverg.import=10, group.freq=1,
                           stop.once.cleared=TRUE){
     ## HANDLE ARGUMENTS ##
     ## handle group sizes
@@ -321,6 +322,7 @@ simOutbreak <- function(initial_sus = 200,
                         inf.source = paste("ID", ifelse(is.na(myoutbreak$ances), 0, myoutbreak$ances), sep = "_"),
                         nmut = myoutbreak$nmut)
 
+  library(dplyr)
   wiwdata <- epidata %>%
     select(inf.source) %>%
     left_join((epidata %>% select(inf.ID, inf.times)), by = c("inf.source" = "inf.ID")) %>%
