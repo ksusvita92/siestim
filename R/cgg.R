@@ -1,6 +1,6 @@
 #' Compound Geometric Gamma
 #'
-#' @description Random generator, density, cumulative density, and quantile functions
+#' @description Random generator, density, cumulative probability, and quantile functions
 #' of a Compound Geometric
 #' Gamma (CGG) distribution.
 #'

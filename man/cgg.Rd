@@ -44,7 +44,7 @@ The length of the result is determined by \code{n} for \code{rcgg}, the length o
 \code{x} for \code{dcgg} and \code{pcgg}, and the length of \code{p} for \code{qcgg}.
 }
 \description{
-Random generator, density, cumulative density, and quantile functions
+Random generator, density, cumulative probability, and quantile functions
 of a Compound Geometric
 Gamma (CGG) distribution.
 }
