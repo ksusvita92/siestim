@@ -3,11 +3,6 @@ new_siestim <- function(x) structure(x, class = "siestim")
 
 
 
-#' Define class plotsi
-new_plotsi <- function(x) structure(x, class = "plotsi")
-
-
-
 #' Define class outbreak
 new_simOutbreak <- function(x) structure(x, class = "simOutbreak")
 
@@ -16,6 +11,10 @@ new_simOutbreak <- function(x) structure(x, class = "simOutbreak")
 #' @export
 getci <- function(x, level = .95) UseMethod("getci", x)
 getci2 <- function(x, level = .95) UseMethod("getci2", x)
+
+#' Plot siestim result
+#' @export
+plot <- function(x) UseMethod("plot", x)
 
 
 #' Create generic function createTC
