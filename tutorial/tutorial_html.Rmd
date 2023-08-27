@@ -173,7 +173,17 @@ You can sample $p=.6$ of the infected cases to reconstruct the transmission clou
 mytc <- createTC(myoutbreak, .6, 18, seed = 12)
 
 # true transmission tree
-adegenet::plot(mytc$tt,
+## plot using epicontacts
+library(epicontacts)
+tt <- make_epicontacts(mytc$tt,
+    mytc$tt %>% 
+      filter(!is.na(inf.source)),
+    id = "inf.ID",
+    from = "inf.source",
+    to = "inf.ID",
+    directed = T)
+
+adegenet::plot(tt,
      thin = F,
      x_axis = "inf.times",
      node_color = "group",
@@ -188,18 +198,28 @@ adegenet::plot(mytc$tt,
      label = F)
 
 # plot transmission cloud
-library(dplyr)
-library(visNetwork)
-tc_nodes <- mytc$tt$linelist %>%
-  filter(group == "sampled") %>%
-  select(id)
-tc_edges <- data.frame(from = mytc$tc$inf.source, to = mytc$tc$inf.ID, arrows = "to")
-visNetwork(tc_nodes, tc_edges, width = "100%", height = "500px") %>%
-  visOptions(highlightNearest = list(enabled = TRUE, algorithm = "hierarchical")) %>%
-  visNodes(size = 25) %>%
-  visEdges(width = 5, color = "black") %>%
-  visLegend() %>%
-  visLayout(randomSeed = 12)
+## plot using epicontacts
+tc <- make_epicontacts(mytc$tt %>% filter(group == "sampled"),
+    mytc$tc,
+    id = "inf.ID",
+    from = "inf.source",
+    to = "inf.ID",
+    directed = T)
+tc$contacts$si <- tc$contacts$si+1 # edge's length proportional to the serial interval
+
+adegenet::plot(tc,
+    thin = T,
+    label = F,
+    node_color = NULL,
+    #
+    edge_color = "type",
+    edge_col_pal = c(coprimary = "#DF536B", `non-coprimary` = "#2297E6", neither = "#9E9E9E"),
+    edge_width = "si",
+    #
+    height = 800,
+    width = 600,
+    legend_width = .2)
+
 ```
 
 
