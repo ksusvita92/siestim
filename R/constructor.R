@@ -20,3 +20,8 @@ plot <- function(x) UseMethod("plot", x)
 #' Create generic function createTC
 #' @export
 createTC <- function(x, downsampling_prob, cutoff, dna_model = "N", seed = 1) UseMethod("createTC", x)
+
+
+
+
+
