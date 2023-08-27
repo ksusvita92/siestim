@@ -12,7 +12,6 @@
 #' @param dna_model DNA evolution model; see Details
 #' @param seed seed number
 #'
-#' @importFrom epicontacts make_epicontacts
 #' @importFrom igraph graph_from_data_frame shortest_paths
 #'
 #' @return The function returns the following outputs:\cr
@@ -21,10 +20,13 @@
 #'     \item \code{tc} a data frame of all plausible transmission pairs.
 #' }
 #'
-#' The \code{tc} data frame consists of these following columns:\cr
+#' The column's name of \code{tt} and \code{tc}:\cr
 #' \itemize{
 #'     \item \code{inf.source} IDs of the potential infectors
 #'     \item \code{inf.ID} IDs of the infectees
+#'     \item \code{inf.times} time of infection
+#'     \item \code{rec.times} time of recovery
+#'     \item \code{nmut} genetic distance (in SNPs)
 #'     \item \code{si} serial interval data
 #'     \item \code{type} transmission type: coprimary, non-coprimary, neither
 #'     \item \code{M} number of unsampled intermediaries in the non-coprimary transmission
@@ -38,25 +40,12 @@
 #' epsilon <- 15 # genomic distance cutoff
 #' outbreak <- simOutbreak(genint_params = c(4.5,2))
 #' mytc <- createTC(outbreak, p, epsilon)
-#' plot(mytc$tt,
-#'      thin = F,
-#'      x_axis = "inf.times",
-#'      node_color = "group",
-#'      node_value = 1,
-#'      col_pal = c(unsampled = "black", sampled = "gold"),
-#'      arrow_size = .5,
-#'      node_size = 5,
-#'      edge_width = .5,
-#'      node_width = .5,
-#'      height = 800,
-#'      width = 600,
-#'      label = F)
 
 createTC.simOutbreak <- function(outbreak,
-                     downsampling_prob,
-                     cutoff,
-                     dna_model = "N",
-                     seed = 1){
+                                 downsampling_prob,
+                                 cutoff,
+                                 dna_model = "N",
+                                 seed = 1){
 
   library(dplyr)
   set.seed(seed)
@@ -179,19 +168,12 @@ createTC.simOutbreak <- function(outbreak,
 
   # plot true transmission tree
   outbreak$epidata$group <- ifelse(!(outbreak$epidata$inf.ID %in% unsampled), "sampled", "unsampled")
-  epicont <- epicontacts::make_epicontacts(outbreak$epidata,
-                                           contacts = outbreak$epidata %>%
-                                             select(inf.source, inf.ID, nmut) %>%
-                                             filter(!is.na(inf.source)),
-                                           id = "inf.ID",
-                                           from = "inf.source",
-                                           to = "inf.ID",
-                                           directed = T)
 
 
 
   # output
-  list(tt = epicont, tc = newepi)
+  out <- list(tt = outbreak$epidata, tc = newepi)
+  return(out)
 }
 
 

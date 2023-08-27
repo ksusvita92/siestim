@@ -24,10 +24,13 @@ The function returns the following outputs:\cr
     \item \code{tc} a data frame of all plausible transmission pairs.
 }
 
-The \code{tc} data frame consists of these following columns:\cr
+The column's name of \code{tt} and \code{tc}:\cr
 \itemize{
     \item \code{inf.source} IDs of the potential infectors
     \item \code{inf.ID} IDs of the infectees
+    \item \code{inf.times} time of infection
+    \item \code{rec.times} time of recovery
+    \item \code{nmut} genetic distance (in SNPs)
     \item \code{si} serial interval data
     \item \code{type} transmission type: coprimary, non-coprimary, neither
     \item \code{M} number of unsampled intermediaries in the non-coprimary transmission
@@ -47,17 +50,4 @@ p <- .7 # sampling proportion
 epsilon <- 15 # genomic distance cutoff
 outbreak <- simOutbreak(genint_params = c(4.5,2))
 mytc <- createTC(outbreak, p, epsilon)
-plot(mytc$tt,
-     thin = F,
-     x_axis = "inf.times",
-     node_color = "group",
-     node_value = 1,
-     col_pal = c(unsampled = "black", sampled = "gold"),
-     arrow_size = .5,
-     node_size = 5,
-     edge_width = .5,
-     node_width = .5,
-     height = 800,
-     width = 600,
-     label = F)
 }
