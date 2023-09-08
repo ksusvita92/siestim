@@ -2,7 +2,6 @@
 
 S3method(createTC,simOutbreak)
 S3method(getci,siestim)
-S3method(getci2,siestim)
 S3method(plot,siestim)
 S3method(print,siestim)
 S3method(print,simOutbreak)
