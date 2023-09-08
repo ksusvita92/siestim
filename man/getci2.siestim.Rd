@@ -4,7 +4,7 @@
 \alias{getci2.siestim}
 \title{Estimate Confidence Interval Using Likelihood Ratio}
 \usage{
-\method{getci2}{siestim}(x, level = 0.95)
+getci2.siestim(x, level = 0.95)
 }
 \arguments{
 \item{x}{object of class \code{siestim}.}
