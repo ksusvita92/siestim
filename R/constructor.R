@@ -10,7 +10,7 @@ new_simOutbreak <- function(x) structure(x, class = "simOutbreak")
 #' Create generic function getci
 #' @export
 getci <- function(x, level = .95) UseMethod("getci", x)
-getci2 <- function(x, level = .95) UseMethod("getci2", x)
+
 
 #' Plot siestim result
 #' @export
