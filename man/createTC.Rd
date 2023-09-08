@@ -2,10 +2,12 @@
 % Please edit documentation in R/constructor.R
 \name{createTC}
 \alias{createTC}
-\title{Create generic function createTC}
+\title{Plot siestim result
+Create generic function createTC}
 \usage{
 createTC(x, downsampling_prob, cutoff, dna_model = "N", seed = 1)
 }
 \description{
+Plot siestim result
 Create generic function createTC
 }
