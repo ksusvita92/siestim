@@ -100,23 +100,23 @@ plot.siestim <- function(x){
   #else p.w <- dbeta(seq(0,1,length.out = 100), x$prior.w[1], x$prior.w[2])
 
   plmu <- ggplot(rec) +
-    geom_histogram(aes(x = mu, y = ..density..), col="black", fill="white", bins = 30) +
+    geom_histogram(aes(x = mu, y = after_stat(density)), col="black", fill="white", bins = 30) +
     geom_vline(aes(xintercept = par[1]), col = "coral", lty = "dashed") +
     theme_light() +
     labs(x = "days", y = expression(hat(mu)))
   plsg <- ggplot(rec) +
-    geom_histogram(aes(x = sigma, y = ..density..), col="black", fill="white", bins = 30) +
+    geom_histogram(aes(x = sigma, y = after_stat(density)), col="black", fill="white", bins = 30) +
     geom_vline(aes(xintercept = par[2]), col = "coral", lty = "dashed") +
     theme_light() +
     labs(x = "days", y = expression(hat(sigma)), title = "")
   plpi <- ggplot() +
-    geom_histogram(aes(x = pi, y = ..density..), rec, col="black", fill="white", bins = 30) +
+    geom_histogram(aes(x = pi, y = after_stat(density)), rec, col="black", fill="white", bins = 30) +
     geom_vline(aes(xintercept = par[3]), col = "coral", lty = "dashed") +
     #geom_line(aes(x = seq(0,1,length.out=100), y = p.pi)) +
     theme_light() +
     labs(x = "", y = expression(hat(pi)), title = "")
   plw <- ggplot() +
-    geom_histogram(aes(x = w, y = ..density..), rec, col="black", fill="white", bins = 30) +
+    geom_histogram(aes(x = w, y = after_stat(density)), rec, col="black", fill="white", bins = 30) +
     geom_vline(aes(xintercept = par[4]), col = "coral", lty = "dashed") +
     #geom_line(aes(x = seq(0,1,length.out=100), y = p.w)) +
     theme_light() +
