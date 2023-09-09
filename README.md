@@ -25,7 +25,7 @@ library("siestim")
 ```
 
 ## Tutorial
-The package tutorial can be found [here](https://github.com/ksusvita92/siestim/blob/main/tutorial/tutorial_siestim.pdf).
+The package tutorial can be found [here](https://github.com/ksusvita92/siestim/blob/main/tutorial/tutorial_html.Rmd). Other version (html or pdf) can be found under subfolder **tutorial**.
 
 ## Contact
 - For general questions and bug reports, please contact <ksusvita@gmail.com>
