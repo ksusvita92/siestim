@@ -36,14 +36,14 @@ This tutorial consists of two parts. In the first half, we will simulate a data 
   * success probability (pi) of sampling the secondary case
   * proportion of non-coprimary transmission (w); see [1].
 
-In the second half, we will simulate an SIR outbreak and then we will estimate the same parameters of interest as above. This section is to show that siestim can also be implemented in a data set that contains stochastic uncertainty.
+In the second half, we will simulate an SIR outbreak and then we will estimate the same parameters of interest as above. This section is to show that siestim can also be implemented in a data set in which sampling is incomplete
 
 
 ## Distribution-based Simulation
 
 Under incomplete sampling, the infector-infectee pairs may not represent direct transmissions. We differentiate two types of transmission: coprimary and non-coprimary. Coprimary transmission is defined as a pair in which both the infector and infectee were directly infected by the same unsampled case; non-coprimary transmission includes both direct transmission and inderect transmission (a pair in which the infector and infectee is separated by at least one unsampled cases). 
 
-We model the serial intervals that come from coprimary transmission using FGD distribution and those come from non-coprimary transmission using CGG distribution. The idea of siestim is to use mixture model to estimate the parameters of interest.
+We model the serial intervals that come from coprimary transmission using the FGD distribution and those come from non-coprimary transmission using the CGG distribution. The idea of siestim is to use mixture model to estimate the parameters of interest.
 
 
 ### Folded Gamma Difference (FGD) Distribution
@@ -249,7 +249,7 @@ myest
 
 To plot the siestim output, you can use
 ```{r siestim_plot, warning=FALSE, message=FALSE, fig.height=4, fig.width=7}
-siestim::plot(myest)
+plot.siestim(myest)
 ```
 
 You can also estimate the 95% confidence interval using
